@@ -1,0 +1,23 @@
+﻿src/App.tsx(5,30): error TS1484: 'UserInput' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/App.tsx(5,41): error TS1484: 'MacroResult' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/components/ui/Button.tsx(1,10): error TS1484: 'ButtonHTMLAttributes' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/components/ui/Card.tsx(1,10): error TS1484: 'HTMLAttributes' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/components/ui/Input.tsx(1,10): error TS1484: 'InputHTMLAttributes' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/components/ui/Label.tsx(1,10): error TS1484: 'LabelHTMLAttributes' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/components/ui/Select.tsx(1,10): error TS1484: 'SelectHTMLAttributes' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/features/calculator/CalculatorForm.tsx(1,10): error TS1484: 'ChangeEvent' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/features/calculator/CalculatorForm.tsx(1,23): error TS1484: 'FormEvent' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/features/calculator/CalculatorForm.tsx(7,10): error TS1484: 'ActivityLevel' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/features/calculator/CalculatorForm.tsx(7,10): error TS6133: 'ActivityLevel' is declared but its value is never read.
+src/features/calculator/CalculatorForm.tsx(7,25): error TS1484: 'Gender' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/features/calculator/CalculatorForm.tsx(7,25): error TS6133: 'Gender' is declared but its value is never read.
+src/features/calculator/CalculatorForm.tsx(7,33): error TS1484: 'Goal' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/features/calculator/CalculatorForm.tsx(7,33): error TS6133: 'Goal' is declared but its value is never read.
+src/features/calculator/CalculatorForm.tsx(7,39): error TS1484: 'UserInput' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/features/calculator/CalculatorForm.tsx(7,50): error TS6133: 'ACTIVITY_MULTIPLIERS' is declared but its value is never read.
+src/features/calculator/CalculatorForm.tsx(7,72): error TS6133: 'GOAL_ADJUSTMENTS' is declared but its value is never read.
+src/features/calculator/ResultsView.tsx(1,10): error TS1484: 'MacroResult' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
+src/features/calculator/ResultsView.tsx(68,19): error TS2322: Type '(value: number) => [string, "Calories"]' is not assignable to type 'Formatter<number, "Calories">'.
+  Types of parameters 'value' and 'value' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
