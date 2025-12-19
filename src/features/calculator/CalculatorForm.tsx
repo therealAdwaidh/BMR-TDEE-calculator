@@ -2,21 +2,30 @@ import { type ChangeEvent, type FormEvent, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/Card';
 import { Label } from '../../components/ui/Label';
 import { Input } from '../../components/ui/Input';
-import { Select } from '../../components/ui/Select';
 import { Button } from '../../components/ui/Button';
 import { type UserInput } from '../../utils/nutrition';
-import { Calculator, ArrowRight } from 'lucide-react';
+import { Calculator, ArrowRight, Plus, Minus } from 'lucide-react';
 
 interface CalculatorFormProps {
   onSubmit: (data: UserInput) => void;
 }
 
+// Local interface allowing strings for better input handling
+interface FormState {
+  gender: string;
+  age: string;
+  height: string;
+  weight: string;
+  activityLevel: string;
+  goal: string;
+}
+
 export function CalculatorForm({ onSubmit }: CalculatorFormProps) {
-  const [formData, setFormData] = useState<UserInput>({
+  const [formData, setFormData] = useState<FormState>({
     gender: 'male',
-    age: 25,
-    height: 175,
-    weight: 75,
+    age: '25',
+    height: '175',
+    weight: '75',
     activityLevel: 'moderate',
     goal: 'maintenance',
   });
@@ -25,15 +34,33 @@ export function CalculatorForm({ onSubmit }: CalculatorFormProps) {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: name === 'age' || name === 'height' || name === 'weight' 
-        ? Number(value) 
-        : value,
+      [name]: value,
     }));
   };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    onSubmit(formData);
+    // Convert strings to numbers and cast types
+    // Note: In a real app we'd validate the enum values more strictly
+    onSubmit({
+      gender: formData.gender as any,
+      age: Number(formData.age),
+      height: Number(formData.height),
+      weight: Number(formData.weight),
+      activityLevel: formData.activityLevel as any,
+      goal: formData.goal as any,
+    });
+  };
+
+  const adjustValue = (field: keyof FormState, amount: number, min: number, max: number) => {
+    setFormData(prev => {
+      const currentValue = Number(prev[field]) || 0;
+      const newValue = Math.min(Math.max(currentValue + amount, min), max);
+      return {
+        ...prev,
+        [field]: String(newValue)
+      };
+    });
   };
 
   return (
@@ -49,75 +76,168 @@ export function CalculatorForm({ onSubmit }: CalculatorFormProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="gender">Gender</Label>
-              <Select id="gender" name="gender" value={formData.gender} onChange={handleChange}>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-              </Select>
+              <Input 
+                id="gender" 
+                name="gender" 
+                list="gender-options"
+                value={formData.gender} 
+                onChange={handleChange}
+                placeholder="Select or type gender"
+              />
+              <datalist id="gender-options">
+                <option value="male" />
+                <option value="female" />
+              </datalist>
             </div>
             
             <div className="space-y-2">
               <Label htmlFor="age">Age (years)</Label>
-              <Input 
-                id="age" 
-                name="age" 
-                type="number" 
-                min={15} 
-                max={100} 
-                value={formData.age} 
-                onChange={handleChange} 
-                required 
-              />
+              <div className="flex items-center gap-2">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  size="sm" 
+                  className="h-10 w-10 p-0 shrink-0"
+                  onClick={() => adjustValue('age', -1, 15, 100)}
+                >
+                  <Minus className="h-4 w-4" />
+                </Button>
+                <div className="relative w-full">
+                  <Input 
+                    id="age" 
+                    name="age" 
+                    type="number" 
+                    min={15} 
+                    max={100} 
+                    value={formData.age} 
+                    onChange={handleChange} 
+                    className="text-center"
+                    required 
+                  />
+                </div>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  size="sm" 
+                  className="h-10 w-10 p-0 shrink-0"
+                  onClick={() => adjustValue('age', 1, 15, 100)}
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="height">Height (cm)</Label>
-              <Input 
-                id="height" 
-                name="height" 
-                type="number" 
-                min={100} 
-                max={250} 
-                value={formData.height} 
-                onChange={handleChange} 
-                required 
-              />
+              <div className="flex items-center gap-2">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  size="sm" 
+                  className="h-10 w-10 p-0 shrink-0"
+                  onClick={() => adjustValue('height', -1, 100, 250)}
+                >
+                  <Minus className="h-4 w-4" />
+                </Button>
+                <div className="relative w-full">
+                  <Input 
+                    id="height" 
+                    name="height" 
+                    type="number" 
+                    min={100} 
+                    max={250} 
+                    value={formData.height} 
+                    onChange={handleChange} 
+                    className="text-center"
+                    required 
+                  />
+                </div>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  size="sm" 
+                  className="h-10 w-10 p-0 shrink-0"
+                  onClick={() => adjustValue('height', 1, 100, 250)}
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
             
             <div className="space-y-2">
               <Label htmlFor="weight">Weight (kg)</Label>
-              <Input 
-                id="weight" 
-                name="weight" 
-                type="number" 
-                min={30} 
-                max={200} 
-                value={formData.weight} 
-                onChange={handleChange} 
-                required 
-              />
+              <div className="flex items-center gap-2">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  size="sm" 
+                  className="h-10 w-10 p-0 shrink-0"
+                  onClick={() => adjustValue('weight', -1, 30, 200)}
+                >
+                  <Minus className="h-4 w-4" />
+                </Button>
+                <div className="relative w-full">
+                  <Input 
+                    id="weight" 
+                    name="weight" 
+                    type="number" 
+                    min={30} 
+                    max={200} 
+                    value={formData.weight} 
+                    onChange={handleChange} 
+                    className="text-center"
+                    required 
+                  />
+                </div>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  size="sm" 
+                  className="h-10 w-10 p-0 shrink-0"
+                  onClick={() => adjustValue('weight', 1, 30, 200)}
+                >
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="activityLevel">Activity Level</Label>
-            <Select id="activityLevel" name="activityLevel" value={formData.activityLevel} onChange={handleChange}>
-              <option value="sedentary">Sedentary (Little or no exercise)</option>
-              <option value="light">Light (Exercise 1-3 days/week)</option>
-              <option value="moderate">Moderate (Exercise 3-5 days/week)</option>
-              <option value="heavy">Heavy (Exercise 6-7 days/week)</option>
-              <option value="athlete">Athlete (Physical job or 2x training)</option>
-            </Select>
+            <Input 
+              id="activityLevel" 
+              name="activityLevel" 
+              list="activity-options"
+              value={formData.activityLevel} 
+              onChange={handleChange}
+              placeholder="Select activity level"
+            />
+            <datalist id="activity-options">
+              <option value="sedentary">Little or no exercise</option>
+              <option value="light">Exercise 1-3 days/week</option>
+              <option value="moderate">Exercise 3-5 days/week</option>
+              <option value="heavy">Exercise 6-7 days/week</option>
+              <option value="athlete">Physical job or 2x training</option>
+            </datalist>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="goal">Goal</Label>
-            <Select id="goal" name="goal" value={formData.goal} onChange={handleChange}>
+            <Input 
+              id="goal" 
+              name="goal" 
+              list="goal-options"
+              value={formData.goal} 
+              onChange={handleChange}
+              placeholder="Select goal"
+            />
+            <datalist id="goal-options">
               <option value="loss">Weight Loss (-500 kcal)</option>
               <option value="maintenance">Maintenance (0 kcal)</option>
               <option value="gain">Muscle Gain (+500 kcal)</option>
-            </Select>
+            </datalist>
           </div>
 
           <Button type="submit" className="w-full text-lg h-12 mt-4" size="lg">
